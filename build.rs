@@ -5,6 +5,7 @@ use std::path::Path;
 fn main() {
     get_ollama_exe();
     setup_model();
+    println!("cargo:rerun-if-changed=*");
 }
 
 fn download_file(url: &str, output: &str) -> Result<(), Box<dyn std::error::Error>> {
