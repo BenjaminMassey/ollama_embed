@@ -4,6 +4,7 @@ use std::path::Path;
 
 fn main() {
     get_ollama_exe();
+    setup_model();
 }
 
 fn download_file(url: &str, output: &str) -> Result<(), Box<dyn std::error::Error>> {
@@ -75,3 +76,15 @@ fn get_ollama_exe() {
     archive.unpack(&output_dir).unwrap();
     std::fs::remove_file(&output_tgz).unwrap();
 } // TODO: untested
+
+fn setup_model() {
+    let target_dir = get_project_directory();
+    let target_path = Path::new(&target_dir);
+    let output_dir = target_path.join("ollama-model");
+    if output_dir.exists() {
+        return;
+    }
+    std::fs::create_dir_all(&output_dir).unwrap();
+    let output_modelfile = output_dir.join("ModelFile");
+    let _ = std::fs::copy("./ModelFile", output_modelfile);
+}

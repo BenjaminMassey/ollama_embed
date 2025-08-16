@@ -47,7 +47,7 @@ fn model_exists(client: &reqwest::blocking::Client) -> bool {
 #[cfg(target_os = "windows")]
 fn create() {
     run_command(
-        ".\\ollama-win\\ollama.exe create RustGGUF -f .\\model\\ModelFile"
+        ".\\ollama-win\\ollama.exe create RustGGUF -f .\\ollama-model\\ModelFile"
         )
         .wait()
         .unwrap();
@@ -56,7 +56,7 @@ fn create() {
 #[cfg(not(target_os = "windows"))]
 fn create() {
     run_command(
-        "./ollama-lin/ollama create RustGGUF -f ./model/ModelFile"
+        "./ollama-lin/ollama create RustGGUF -f ./ollama-model/ModelFile"
         )
         .wait()
         .unwrap();
