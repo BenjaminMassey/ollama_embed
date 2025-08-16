@@ -5,6 +5,7 @@ use std::path::Path;
 fn main() {
     get_ollama_exe();
     setup_model();
+    copy_deploy_scripts();
     println!("cargo:rerun-if-changed=*");
 }
 
@@ -88,4 +89,17 @@ fn setup_model() {
     std::fs::create_dir_all(&output_dir).unwrap();
     let output_modelfile = output_dir.join("ModelFile");
     let _ = std::fs::write(&output_modelfile, "");
+}
+
+fn copy_deploy_scripts() {
+    let target_dir = get_project_directory();
+    let target_path = Path::new(&target_dir);
+    let win_path = target_path.join("deploy-win.bat");
+    if !win_path.exists() {
+        std::fs::copy("deploy-win.bat", &win_path).unwrap();
+    }
+    let lin_path = target_path.join("deploy-lin.bat");
+    if !lin_path.exists() {
+        std::fs::copy("deploy-lin.bat", &lin_path).unwrap();
+    }
 }
