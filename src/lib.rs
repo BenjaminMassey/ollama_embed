@@ -73,7 +73,7 @@ fn serve() {
 } // TODO: untested
 
 #[cfg(target_os = "windows")]
-pub fn run_command(cmd: &str) -> std::process::Child {
+fn run_command(cmd: &str) -> std::process::Child {
     std::process::Command::new("cmd")
         .args(["/C", cmd])
         .spawn()
@@ -81,7 +81,7 @@ pub fn run_command(cmd: &str) -> std::process::Child {
 }
 
 #[cfg(not(target_os = "windows"))]
-pub fn run_command(cmd: &str) -> std::process::Child {
+fn run_command(cmd: &str) -> std::process::Child {
     std::process::Command::new("sh")
         .arg("-c")
         .arg(cmd)
@@ -117,15 +117,18 @@ struct Response {
     response: Option<String>,
 }
 
-pub fn chat(client: &reqwest::blocking::Client, prompt: &str) -> String {
-    if !is_running(client) || !model_exists(client) {
-        start(client);
+pub fn chat(prompt: &str) -> String {
+    let client = reqwest::blocking::Client::builder()
+        .timeout(None)
+        .build()
+        .unwrap();
+    if !is_running(&client) || !model_exists(&client) {
+        start(&client);
     }
     let body = serde_json::to_string(&Request::new(prompt)).expect("JSON to error");
     let url = "http://localhost:11434/api/generate";
     let result = client
         .post(url)
-        .timeout(std::time::Duration::from_secs(60))
         .body(body)
         .send()
         .expect("LLM endpoint error");
