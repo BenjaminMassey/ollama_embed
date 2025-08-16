@@ -26,7 +26,3 @@ The model created by your `ModelFile` will be named `RustGGUF` in ollama, even i
 If you ever change your `ModelFile`, then you will need to first remove it from ollama before it will properly remake it. This can be done via `./ollama-win/ollama.exe rm RustGGUF`.
 
 In order to package your program, you can run copied-in `deploy-win.bat` or `deploy-lin.sh` scripts. These will create a `deployments` folder in your project's folder, in which there will be subfolders for `windows` and `linux`. Builds will be their own folders within these, which will be named along the structure of `build_<DATE>_<TIME>`. Note that depending on specifics to your software, you may have additional steps to make sure your deployed version has access to all necessary resources: this is only covering `ollama_embed` files.
-
-## Future Plans
-
-There should maybe be injection of useful ignore lines to the resulting projects `.gitignore` file.

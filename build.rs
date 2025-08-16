@@ -6,6 +6,7 @@ fn main() {
     get_ollama_exe();
     setup_model();
     copy_deploy_scripts();
+    inject_gitignore();
     println!("cargo:rerun-if-changed=*");
 }
 
@@ -101,5 +102,28 @@ fn copy_deploy_scripts() {
     let lin_path = target_path.join("deploy-lin.bat");
     if !lin_path.exists() {
         std::fs::copy("deploy-lin.bat", &lin_path).unwrap();
+    }
+}
+
+fn inject_gitignore() {
+    let desired_ignores = vec![
+        "/ollama-model/*.gguf",
+        "/ollama-win",
+        "/ollama-lin",
+        "/deployments",
+    ];
+    let target_dir = get_project_directory();
+    let target_path = Path::new(&target_dir);
+    let ignore_path = target_path.join(".gitignore");
+    let ignore_text = std::fs::read_to_string(&ignore_path).unwrap();
+    let mut ignore_file = std::fs::OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open(&ignore_path)
+        .unwrap();
+    for ignore in desired_ignores {
+        if !ignore_text.contains(ignore) {
+            let _ = write!(ignore_file, "\n{}", ignore);
+        }
     }
 }
