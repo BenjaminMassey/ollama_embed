@@ -87,5 +87,5 @@ fn setup_model() {
     }
     std::fs::create_dir_all(&output_dir).unwrap();
     let output_modelfile = output_dir.join("ModelFile");
-    let _ = std::fs::copy("./ModelFile", output_modelfile);
+    let _ = std::fs::write(&output_modelfile, "");
 }
