@@ -101,7 +101,7 @@ fn copy_deploy_scripts() {
     }
     let lin_path = target_path.join("deploy-lin.bat");
     if !lin_path.exists() {
-        std::fs::copy("deploy-lin.bat", &lin_path).unwrap();
+        std::fs::copy("deploy-lin.sh", &lin_path).unwrap();
     }
 }
 
