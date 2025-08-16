@@ -10,6 +10,10 @@ fn start(client: &reqwest::blocking::Client) {
     }
     if !model_exists(client) {
         create();
+        if !model_exists(client) {
+            drop(stderr_gag);
+            panic!(">>> ollama_embed: Model creation unsuccessful. Have you properly set up your ModelFile?")
+        }
     }
     drop(stdout_gag);
     drop(stderr_gag);
