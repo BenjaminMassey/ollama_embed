@@ -74,11 +74,11 @@ fn get_ollama_exe() {
     let output_tgz = target_path.join("ollama-lin.tgz");
     std::fs::create_dir_all(&output_dir).unwrap();
     let tar_gz_file = std::fs::File::open(&output_tgz).unwrap();
-    let tar_file = flate2::read::GzDecoder::new(tar_gz);
+    let tar_file = flate2::read::GzDecoder::new(tar_gz_file);
     let mut archive = tar::Archive::new(tar_file);
     archive.unpack(&output_dir).unwrap();
     std::fs::remove_file(&output_tgz).unwrap();
-} // TODO: untested
+}
 
 fn setup_model() {
     let target_dir = get_project_directory();
@@ -99,7 +99,7 @@ fn copy_deploy_scripts() {
     if !win_path.exists() {
         std::fs::copy("deploy-win.bat", &win_path).unwrap();
     }
-    let lin_path = target_path.join("deploy-lin.bat");
+    let lin_path = target_path.join("deploy-lin.sh");
     if !lin_path.exists() {
         std::fs::copy("deploy-lin.sh", &lin_path).unwrap();
     }

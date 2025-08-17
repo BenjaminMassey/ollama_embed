@@ -60,11 +60,11 @@ fn create() {
 #[cfg(not(target_os = "windows"))]
 fn create() {
     run_command(
-        "./ollama-lin/ollama create RustGGUF -f ./ollama-model/ModelFile"
+        "./ollama-lin/bin/ollama create RustGGUF -f ./ollama-model/ModelFile"
         )
         .wait()
         .unwrap();
-} // TODO: untested
+}
 
 #[cfg(target_os = "windows")]
 fn serve() {
@@ -73,8 +73,8 @@ fn serve() {
 
 #[cfg(not(target_os = "windows"))]
 fn serve() {
-    let _ = run_command("./ollama-lin/ollama serve");
-} // TODO: untested
+    let _ = run_command("./ollama-lin/bin/ollama serve");
+}
 
 #[cfg(target_os = "windows")]
 fn run_command(cmd: &str) -> std::process::Child {
@@ -91,7 +91,7 @@ fn run_command(cmd: &str) -> std::process::Child {
         .arg(cmd)
         .spawn()
         .unwrap()
-} // TODO: untested
+}
 
 
 // =============================
