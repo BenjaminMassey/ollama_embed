@@ -151,14 +151,17 @@ fn sanitize(original: &str) -> String {
         ("\r", " "),
         ("—", " - "),
     ];
-    let mut new = remove_think_tags(original);
+    let mut new = remove_think_tag(original);
     for (o, n) in &replaces {
         new = new.replace(o, n);
     }
     new
 }
 
-fn remove_think_tags(input: &str) -> String {
-    let re = regex::Regex::new(r#"<think>[^<]*</think>\s*"#).unwrap();
-    re.replace_all(input, "").to_string()
+fn remove_think_tag(text: &str) -> String {
+    let tag = "</think>";
+    match text.find(tag) {
+        Some(index) => text[(index + tag.len())..].trim().to_string(),
+        None => text.to_string(),
+    }
 }
