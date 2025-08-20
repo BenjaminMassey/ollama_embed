@@ -77,6 +77,47 @@ fn serve() {
 }
 
 #[cfg(target_os = "windows")]
+pub fn stop() {
+    run_command(
+        ".\\ollama-win\\ollama.exe stop RustGGUF"
+        )
+        .wait()
+        .unwrap();
+    let stdout_gag = gag::Gag::stdout().unwrap();
+    let stderr_gag = gag::Gag::stderr().unwrap();
+    for app in vec![r#"ollama app.exe"#, r#"ollama.exe"#] {
+        let _ = std::process::Command::new("taskkill")
+            .args(["-F", "/IM", app])
+            .status()
+            .unwrap();
+    }
+    drop(stdout_gag);
+    drop(stderr_gag);
+}
+
+#[cfg(not(target_os = "windows"))]
+pub fn stop() {
+    let stdout_gag = gag::Gag::stdout().unwrap();
+    let stderr_gag = gag::Gag::stderr().unwrap();
+    run_command(
+        "./ollama-lin/bin/ollama stop RustGGUF"
+        )
+        .wait()
+        .unwrap();
+    run_command(
+        "systemctl stop ollama"
+        )
+        .wait()
+        .unwrap();
+    let _ = std::process::Command::new("killall")
+        .args(["-INT", "ollama"])
+        .status()
+        .unwrap();
+    drop(stdout_gag);
+    drop(stderr_gag);
+} // untested
+
+#[cfg(target_os = "windows")]
 fn run_command(cmd: &str) -> std::process::Child {
     std::process::Command::new("cmd")
         .args(["/C", cmd])
